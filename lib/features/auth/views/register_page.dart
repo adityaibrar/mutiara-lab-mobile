@@ -1,10 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
+import '../../../constant/helpers/dialog_helper.dart';
 import '../../../constant/theme.dart';
+import '../../../constant/utils/state_enum.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/input_field.dart';
+import '../providers/auth_provider.dart';
 import 'login_page.dart';
 
 // Halaman Register
@@ -41,7 +45,29 @@ class _RegisterPageState extends State<RegisterPage> {
             isPassword: true,
           ),
           SizedBox(height: 30.h),
-          CustomButton(onPressed: () {}, label: 'Daftar'),
+          Consumer<AuthNotifier>(
+            builder: (context, authNotifier, child) {
+              if (authNotifier.state == RequestState.loading) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  DialogHelper.showLoadingDialog(context);
+                });
+              }
+              if (authNotifier.state == RequestState.loaded) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  DialogHelper.hideLoadingDialog(context);
+                });
+              }
+              return CustomButton(
+                onPressed: () async {
+                  await authNotifier.register(
+                    username: _usernameController.text,
+                    password: _passwordController.text,
+                  );
+                },
+                label: 'Daftar',
+              );
+            },
+          ),
           SizedBox(height: 10.h),
           footer(),
         ],
@@ -83,10 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    LoginPage.routeName,
-                  );
+                  Navigator.pushReplacementNamed(context, LoginPage.routeName);
                 },
             ),
           ],
