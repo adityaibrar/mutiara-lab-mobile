@@ -10,11 +10,13 @@ class AuthNotifier with ChangeNotifier {
   final AuthServices _authServices = AuthServices();
 
   RequestState _state = RequestState.empty;
+  UserStatus _stateUser = UserStatus.isNotReady;
   String? _errorMessage;
   AuthModel? _user;
 
   String? get errorMessage => _errorMessage;
   RequestState get state => _state;
+  UserStatus get stateuser => _stateUser;
   AuthModel? get user => _user;
 
   Future<void> register({
@@ -50,6 +52,7 @@ class AuthNotifier with ChangeNotifier {
       _user = result;
       await _localStorage.setDataUser(authModel: user!);
       _state = RequestState.loaded;
+      _stateUser = UserStatus.isReady;
       if (kDebugMode) {
         print('Login berhasil');
       }
@@ -70,6 +73,13 @@ class AuthNotifier with ChangeNotifier {
     } else {
       _user = null;
     }
+    notifyListeners();
+  }
+
+  Future logout() async {
+    await _localStorage.clearData();
+    _user = null;
+    _stateUser = UserStatus.isNotReady;
     notifyListeners();
   }
 }

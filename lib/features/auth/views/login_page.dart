@@ -7,8 +7,9 @@ import '../../../constant/helpers/dialog_helper.dart';
 import '../../../constant/theme.dart';
 import '../../../constant/utils/state_enum.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/input_field.dart';
-import '../../customers/features/dashboard/views/dashboard_customer_page.dart';
+import '../../customers/views/dashboard_customer_page.dart';
 import '../providers/auth_provider.dart';
 import 'register_page.dart';
 
@@ -23,6 +24,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +65,16 @@ class _LoginPageState extends State<LoginPage> {
                     context,
                     DashboardCustomerPage.routeName,
                   );
+                });
+              }
+              if (authNotifier.state == RequestState.error) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  DialogHelper.hideLoadingDialog(context);
+                  CustomSnackbar(
+                    title: 'Error',
+                    message: 'username atau password yang anda masukkan salah',
+                    type: SnackbarType.error,
+                  ).show(context);
                 });
               }
               return CustomButton(

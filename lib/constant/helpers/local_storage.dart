@@ -21,4 +21,9 @@ class LocalStorage {
     }
     return null;
   }
+
+  Future<void> clearData() async {
+    await _flutterSecureStorage.deleteAll();
+    print('berhasil dihapus');
+  }
 }
