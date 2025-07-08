@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Izin untuk kamera -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Izin untuk baca media (galeri) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Tambahan backward compatibility untuk Android lama -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:label="mutiara_lab"
