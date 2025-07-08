@@ -1,14 +1,18 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../../constant/helpers/dialog_helper.dart';
 import '../../../constant/theme.dart';
+import '../../../constant/utils/state_enum.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_calendar.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/input_field.dart';
+import '../models/upload_document_user.dart';
+import '../providers/customer_provider.dart';
 import '../providers/image_provider.dart';
 
 class FormRequestMessage extends StatefulWidget {
@@ -24,6 +28,7 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _nomorController = TextEditingController();
   final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _yearDocController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
   void showCalendarBottomSheet(BuildContext context) {
@@ -46,6 +51,24 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
     );
   }
 
+  Future postDocument(
+    ImageNotifier imageNotifier,
+    CustomerNotifier customerNotifier,
+  ) async {
+    if (imageNotifier.selectedImage == null) {
+      throw ('gambar kosong');
+    }
+    final data = UploadDocumentUser(
+      docName: _nameDocController.text,
+      docDate: _dateController.text,
+      docNumber: _nomorController.text,
+      docDesc: _subjectController.text,
+      imagePath: imageNotifier.selectedImage!.path,
+      docYear: _yearDocController.text,
+    );
+    await customerNotifier.uploadDocument(data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,8 +80,26 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(gradient: backgroundGradient),
           ),
-          Consumer<ImageNotifier>(
-            builder: (context, imageNotifier, child) {
+          Consumer2<ImageNotifier, CustomerNotifier>(
+            builder: (context, imageNotifier, customerNotifier, child) {
+              if (customerNotifier.state == RequestState.loading) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  DialogHelper.showLoadingDialog(context);
+                });
+              }
+              if (customerNotifier.state == RequestState.loaded) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  DialogHelper.hideLoadingDialog(context);
+                  Navigator.pop(context);
+                  CustomSnackbar(
+                    title: 'Berhasil',
+                    message: 'Dokumen berhasil di upload',
+                    type: SnackbarType.success,
+                  ).show(context);
+                  customerNotifier.resetState();
+                  imageNotifier.deleteImage();
+                });
+              }
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: Container(
@@ -114,7 +155,19 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
                         textStyle: whiteTextStyle,
                       ),
                       SizedBox(height: 10.h),
-                      CustomButton(onPressed: () async {}, label: 'Simpan'),
+                      InputField(
+                        controller: _yearDocController,
+                        label: 'Tahun Dokumen',
+                        borderColor: whiteColor,
+                        textStyle: whiteTextStyle,
+                      ),
+                      SizedBox(height: 10.h),
+                      CustomButton(
+                        onPressed: () async {
+                          await postDocument(imageNotifier, customerNotifier);
+                        },
+                        label: 'Simpan',
+                      ),
                     ],
                   ),
                 ),
