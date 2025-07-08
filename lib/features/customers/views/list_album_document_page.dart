@@ -20,7 +20,10 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CustomerNotifier>().getAlbum();
+      final result = context.read<CustomerNotifier>();
+      if (result.listAlbum == null) {
+        result.getAlbum();
+      }
     });
   }
 
@@ -52,6 +55,7 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
                 if (customerNotifier.state == RequestState.loaded) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     DialogHelper.hideLoadingDialog(context);
+                    customerNotifier.resetState();
                   });
                 }
                 return ListView.separated(

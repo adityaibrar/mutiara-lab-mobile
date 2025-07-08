@@ -50,7 +50,6 @@ class CustomerService {
     final url = Uri.parse(
       '${Appurl.fetchAlbumDocument}/${user!.id}document/album',
     );
-    print(url);
     final header = {'Authorization': 'Bearer ${user.token}'};
     try {
       final response = await http.get(url, headers: header);
