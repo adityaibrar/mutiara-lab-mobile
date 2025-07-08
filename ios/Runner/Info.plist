@@ -2,6 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<!-- Izin untuk kamera -->
+	<key>NSCameraUsageDescription</key>
+	<string>Kami membutuhkan akses kamera untuk mengambil foto.</string>
+
+	<!-- Izin untuk galeri -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Kami membutuhkan akses galeri untuk memilih foto.</string>
+
+	<!-- Optional untuk save ke galeri -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Kami memerlukan izin untuk menyimpan foto ke galeri.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
