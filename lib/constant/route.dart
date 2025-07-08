@@ -2,6 +2,7 @@ import '../features/auth/views/login_page.dart';
 import '../features/auth/views/register_page.dart';
 import '../features/customers/views/dashboard_customer_page.dart';
 import '../features/customers/views/form_request_message.dart';
+import '../features/customers/views/list_album_document_page.dart';
 import '../splash_screen.dart';
 
 dynamic routes = {
@@ -10,4 +11,5 @@ dynamic routes = {
   RegisterPage.routeName: (context) => RegisterPage(),
   DashboardCustomerPage.routeName: (context) => DashboardCustomerPage(),
   FormRequestMessage.routeName: (context) => FormRequestMessage(),
+  ListAlbumDocumentPage.routeName: (context) => ListAlbumDocumentPage(),
 };

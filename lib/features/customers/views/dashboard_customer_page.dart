@@ -7,6 +7,7 @@ import '../../../widgets/button_glass.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../auth/views/login_page.dart';
 import 'form_request_message.dart';
+import 'list_album_document_page.dart';
 
 class DashboardCustomerPage extends StatelessWidget {
   static const String routeName = '/dashboard-customer-page';
@@ -55,7 +56,7 @@ class DashboardCustomerPage extends StatelessWidget {
               ButtonGlass(
                 title: 'Lihat Surat Permintaan',
                 onTap: () {
-                  print('lihat');
+                  Navigator.pushNamed(context, ListAlbumDocumentPage.routeName);
                 },
               ),
               SizedBox(height: 10.h),
