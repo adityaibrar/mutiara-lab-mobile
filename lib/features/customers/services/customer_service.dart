@@ -48,7 +48,7 @@ class CustomerService {
   Future<List<AlbumDocument>> getAlbumDocument() async {
     final user = await _localStorage.getDataUser();
     final url = Uri.parse(
-      '${Appurl.fetchAlbumDocument}/${user!.id}document/album',
+      '${Appurl.fetchAlbumDocument}/${user!.id}/document/album',
     );
     final header = {'Authorization': 'Bearer ${user.token}'};
     try {
@@ -57,7 +57,12 @@ class CustomerService {
       if (response.statusCode != 200) {
         throw Exception('Failed fetch album document user');
       }
-      final result = (responseData['data_album'] as List)
+      final dataAlbum = responseData['data_album'];
+      if (dataAlbum == null || dataAlbum is! List) {
+        return [];
+      }
+
+      final result = dataAlbum
           .map((item) => AlbumDocument.fromMap(item))
           .toList();
       return result;

@@ -7,13 +7,14 @@ import '../services/customer_service.dart';
 
 class CustomerNotifier with ChangeNotifier {
   final CustomerService _customerService = CustomerService();
+
   RequestState _state = RequestState.empty;
   String? _errorMessage = '';
-  List<AlbumDocument>? _listAlbum;
+  List<AlbumDocument> _listAlbum = [];
 
   RequestState get state => _state;
   String? get errorMessage => _errorMessage;
-  List<AlbumDocument>? get listAlbum => _listAlbum;
+  List<AlbumDocument> get listAlbum => _listAlbum;
 
   Future<void> uploadDocument(UploadDocumentUser uploadDocumentCustomer) async {
     _state = RequestState.loading;
@@ -31,7 +32,6 @@ class CustomerNotifier with ChangeNotifier {
   Future<void> getAlbum() async {
     _state = RequestState.loading;
     notifyListeners();
-
     try {
       final result = await _customerService.getAlbumDocument();
       _listAlbum = result;

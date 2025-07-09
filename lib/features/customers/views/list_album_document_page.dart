@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mutiara_lab/widgets/custom_snackbar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/helpers/dialog_helper.dart';
@@ -21,7 +22,7 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final result = context.read<CustomerNotifier>();
-      if (result.listAlbum == null) {
+      if (result.listAlbum.isEmpty) {
         result.getAlbum();
       }
     });
@@ -34,8 +35,8 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
       body: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: double.infinity,
+            width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -44,30 +45,46 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Consumer<CustomerNotifier>(
               builder: (context, customerNotifier, child) {
-                if (customerNotifier.state == RequestState.loading) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (customerNotifier.state == RequestState.loading) {
                     DialogHelper.showLoadingDialog(context);
-                  });
-                }
-                if (customerNotifier.state == RequestState.loaded) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                  }
+                  if (customerNotifier.state == RequestState.loaded) {
                     DialogHelper.hideLoadingDialog(context);
+                    if (customerNotifier.listAlbum.isEmpty) {
+                      CustomSnackbar(
+                        title: 'Info',
+                        message: 'Belum ada dokumen yang tersedia',
+                        type: SnackbarType.success,
+                      ).show(context);
+                    }
+                  }
+
+                  if (customerNotifier.state == RequestState.error) {
+                    DialogHelper.hideLoadingDialog(context);
+                    CustomSnackbar(
+                      title: 'Error',
+                      message: 'Error ${customerNotifier.errorMessage}',
+                      type: SnackbarType.success,
+                    ).show(context);
                     customerNotifier.resetState();
-                  });
-                }
+                  }
+                });
+
                 return ListView.separated(
-                  itemCount: customerNotifier.listAlbum?.length ?? 0,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 10.h);
-                  },
+                  itemCount: customerNotifier.listAlbum.length,
+                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
-                    final item = customerNotifier.listAlbum?[index];
+                    final item = customerNotifier.listAlbum[index];
                     return ItemAlbum(
-                      year: item?.year ?? 0,
-                      totalDocument: item?.totalDocument ?? '',
+                      year: item.year ?? 0,
+                      totalDocument: item.totalDocument ?? '',
+                      onTap: () {
+                        print(item.year);
+                      },
                     );
                   },
                 );
