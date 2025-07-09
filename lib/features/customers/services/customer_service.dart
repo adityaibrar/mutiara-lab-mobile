@@ -6,6 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
 import '../models/album_document.dart';
+import '../models/document_user.dart';
 import '../models/upload_document_user.dart';
 
 class CustomerService {
@@ -68,6 +69,32 @@ class CustomerService {
       return result;
     } catch (e) {
       throw (e.toString());
+    }
+  }
+
+  Future<List<DocumentUser>> getListDocument(int year) async {
+    final user = await _localStorage.getDataUser();
+    final url = Uri.parse(
+      '${Appurl.fetchAlbumDocument}/${user!.id}/document/$year',
+    );
+    final header = {'Authorization': 'Bearer ${user.token}'};
+    try {
+      final response = await http.get(url, headers: header);
+      final responseData = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw Exception('Failed fetch album document user');
+      }
+      final dataAlbum = responseData['albums'];
+      if (dataAlbum == null || dataAlbum is! List) {
+        return [];
+      }
+
+      final result = dataAlbum
+          .map((item) => DocumentUser.fromMap(item))
+          .toList();
+      return result;
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

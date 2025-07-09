@@ -3,50 +3,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/helpers/dialog_helper.dart';
+import '../../../constant/theme.dart';
 import '../../../constant/utils/state_enum.dart';
 import '../../../widgets/custom_snackbar.dart';
-import '../../../widgets/item_album.dart';
+import '../../../widgets/item_document.dart';
 import '../providers/customer_provider.dart';
-import 'list_document_user.dart';
+import 'detail_document_user.dart';
 
-class ListAlbumDocumentPage extends StatefulWidget {
-  static const String routeName = '/list-album';
-  const ListAlbumDocumentPage({super.key});
+class ListDocumentUser extends StatefulWidget {
+  static const String routeName = '/list-document-user';
+  const ListDocumentUser({super.key});
 
   @override
-  State<ListAlbumDocumentPage> createState() => _ListAlbumDocumentPageState();
+  State<ListDocumentUser> createState() => _ListDocumentUserState();
 }
 
-class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
+class _ListDocumentUserState extends State<ListDocumentUser> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final result = context.read<CustomerNotifier>();
-      if (result.listAlbum.isEmpty) {
-        result.getAlbum();
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('List Album Dokumen')),
+      appBar: AppBar(title: Text('Dokumen Tahun')),
       body: Stack(
         children: [
           Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                colors: [Color(0xFF0F172A), Color(0xFF1E3A8A)],
-              ),
-            ),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(gradient: backgroundGradient),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.all(12),
             child: Consumer<CustomerNotifier>(
               builder: (context, customerNotifier, child) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -74,25 +64,22 @@ class _ListAlbumDocumentPageState extends State<ListAlbumDocumentPage> {
                     customerNotifier.resetState();
                   }
                 });
-
                 return ListView.separated(
-                  itemCount: customerNotifier.listAlbum.length,
-                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
-                    final item = customerNotifier.listAlbum[index];
-                    return ItemAlbum(
-                      year: item.year ?? 0,
-                      totalDocument: item.totalDocument ?? '',
-                      onTap: () async {
-                        customerNotifier.getDocumentYear(item.year!);
+                    final item = customerNotifier.listDocument[index];
+                    return ItemDocument(
+                      documentUser: item,
+                      onTap: () {
                         Navigator.pushNamed(
                           context,
-                          ListDocumentUser.routeName,
-                          // arguments: item.year,
+                          DetailDocumentUser.routeName,
+                          arguments: item,
                         );
                       },
                     );
                   },
+                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
+                  itemCount: customerNotifier.listDocument.length,
                 );
               },
             ),
