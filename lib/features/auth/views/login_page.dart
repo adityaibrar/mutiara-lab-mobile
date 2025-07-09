@@ -10,6 +10,9 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/input_field.dart';
 import '../../customers/views/dashboard_customer_page.dart';
+import '../../koor_teknis/views/dashboard_koor_teknis.dart';
+import '../../marketing/views/dashboard_marketing.dart';
+import '../../penyedia_sampling/views/dashboard_penyedia_sampling.dart';
 import '../providers/auth_provider.dart';
 import 'register_page.dart';
 
@@ -61,10 +64,27 @@ class _LoginPageState extends State<LoginPage> {
               if (authNotifier.state == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pushReplacementNamed(
-                    context,
-                    DashboardCustomerPage.routeName,
-                  );
+                  if (authNotifier.user!.role == 'customer') {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      DashboardCustomerPage.routeName,
+                    );
+                  } else if (authNotifier.user!.role == 'marketing') {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      DashboardMarketing.routeName,
+                    );
+                  } else if (authNotifier.user!.role == 'koor teknis') {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      DashboardKoorTeknis.routeName,
+                    );
+                  } else if (authNotifier.user!.role == 'penyedia sampling') {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      DashboardPenyediaSampling.routeName,
+                    );
+                  }
                 });
               }
               if (authNotifier.state == RequestState.error) {
