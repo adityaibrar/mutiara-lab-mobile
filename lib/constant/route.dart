@@ -1,3 +1,5 @@
+import 'package:mutiara_lab/features/marketing/views/upload_document_marketing.dart';
+
 import '../features/auth/views/login_page.dart';
 import '../features/auth/views/register_page.dart';
 import '../features/customers/views/dashboard_customer_page.dart';
@@ -8,6 +10,7 @@ import '../features/customers/views/list_document_user.dart';
 import '../features/koor_teknis/views/dashboard_koor_teknis.dart';
 import '../features/koor_teknis/views/list_dokumen_user_teknis.dart';
 import '../features/marketing/views/dashboard_marketing.dart';
+import '../features/marketing/views/detail_document_marketing.dart';
 import '../features/marketing/views/list_document_quotation.dart';
 import '../features/marketing/views/list_dokumen_user_marketing.dart';
 import '../features/penyedia_sampling/views/dashboard_penyedia_sampling.dart';
@@ -25,6 +28,8 @@ dynamic routes = {
   DetailDocumentUser.routeName: (context) => DetailDocumentUser(),
   DashboardMarketing.routeName: (context) => DashboardMarketing(),
   ListDokumenUserMarketing.routeName: (context) => ListDokumenUserMarketing(),
+  DetailDocumentMarketing.routeName: (context) => DetailDocumentMarketing(),
+  UploadDocumentMarketing.routeName: (context) => UploadDocumentMarketing(),
   ListDocumentQuotation.routeName: (context) => ListDocumentQuotation(),
   DashboardKoorTeknis.routeName: (context) => DashboardKoorTeknis(),
   ListDokumenUserTeknis.routeName: (context) => ListDokumenUserTeknis(),

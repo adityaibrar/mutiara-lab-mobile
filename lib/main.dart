@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mutiara_lab/features/customers/providers/customer_provider.dart';
 import 'package:mutiara_lab/features/customers/providers/image_provider.dart';
+import 'package:mutiara_lab/features/marketing/providers/marketing_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'constant/route.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthNotifier()),
         ChangeNotifierProvider(create: (_) => ImageNotifier()),
         ChangeNotifierProvider(create: (_) => CustomerNotifier()),
+        ChangeNotifierProvider(create: (_) => MarketingNotifier()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
