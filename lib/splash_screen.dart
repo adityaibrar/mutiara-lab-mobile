@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'constant/utils/state_enum.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/views/login_page.dart';
 import 'features/customers/views/dashboard_customer_page.dart';
-import 'package:provider/provider.dart';
+import 'features/koor_teknis/views/dashboard_koor_teknis.dart';
+import 'features/marketing/views/dashboard_marketing.dart';
+import 'features/penyedia_sampling/views/dashboard_penyedia_sampling.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
@@ -32,11 +36,17 @@ class _SplashScreenState extends State<SplashScreen> {
           authNotifier.stateuser == UserStatus.isNotReady) {
         // Sekarang state sudah terupdate
         Navigator.pushReplacementNamed(context, LoginPage.routeName);
-      } else {
+      } else if (authNotifier.user!.role == 'customer') {
         Navigator.pushReplacementNamed(
           context,
           DashboardCustomerPage.routeName,
         );
+      } else if (authNotifier.user!.role == 'marketing') {
+        // Navigator.pushReplacementNamed(context, DashboardMarketing.routeName);
+      } else if (authNotifier.user!.role == 'koor teknis') {
+        Navigator.pushReplacementNamed(context, DashboardKoorTeknis.routeName);
+      } else if (authNotifier.user!.role == 'penyedia sampling') {
+        Navigator.pushReplacementNamed(context, DashboardPenyediaSampling.routeName);
       }
     });
   }

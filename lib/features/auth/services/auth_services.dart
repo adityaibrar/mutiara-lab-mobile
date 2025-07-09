@@ -37,6 +37,7 @@ class AuthServices {
         id: userData['id'],
         username: userData['username'],
         token: userData['token'],
+        role: userData['role'],
       );
       return user;
     } catch (e) {
