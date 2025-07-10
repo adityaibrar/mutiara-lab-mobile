@@ -39,7 +39,7 @@ class MarketingService {
     UploadDocumentMarketingModel uploadDocumentMarketing,
   ) async {
     final user = await _localStorage.getDataUser();
-    final url = Uri.parse('${Appurl.uploadDocumentmarketing}/$id');
+    final url = Uri.parse('${Appurl.marketingDocument}/$id');
     try {
       var request = http.MultipartRequest('POST', url);
       request.headers['Authorization'] = 'Bearer ${user!.token}';

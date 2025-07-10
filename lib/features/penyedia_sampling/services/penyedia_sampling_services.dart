@@ -5,15 +5,14 @@ import 'package:http_parser/http_parser.dart';
 
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
-import '../models/marketing_document.dart';
-import '../models/upload_document_koorteknis.dart';
+import '../models/koor_teknis_document.dart';
+import '../models/upload_document_penyedia_sampling_model.dart';
 
-class KoorTeknisService {
+class PenyediaSamplingServices {
   final LocalStorage _localStorage = LocalStorage();
-
-  Future<List<MarketingDocument>> getListDocument() async {
+  Future<List<KoorTeknisDocument>> getListDocument() async {
     final user = await _localStorage.getDataUser();
-    final url = Uri.parse(Appurl.marketingDocument);
+    final url = Uri.parse(Appurl.koorTeknisDocument);
     final header = {'Authorization': 'Bearer ${user!.token}'};
     try {
       final response = await http.get(url, headers: header);
@@ -21,13 +20,13 @@ class KoorTeknisService {
       if (response.statusCode != 200) {
         throw Exception('Failed fetch album document user');
       }
-      final dataDocument = responseData['data_marketing'];
+      final dataDocument = responseData['data_koor_teknis'];
       if (dataDocument == null || dataDocument is! List) {
         return [];
       }
 
       final result = dataDocument
-          .map((item) => MarketingDocument.fromMap(item))
+          .map((item) => KoorTeknisDocument.fromMap(item))
           .toList();
       return result;
     } catch (e) {
@@ -35,28 +34,33 @@ class KoorTeknisService {
     }
   }
 
-  Future<void> uploadDocumentTeknisService(
+  Future<void> uploadDocumentPenyediaSamplingService(
     int id,
-    UploadDocumentKoorteknis uploadDocumentKoorteknis,
+    UploadDocumentPenyediaSamplingModel uploadDocumentPenyediaSampling,
   ) async {
     final user = await _localStorage.getDataUser();
-    final url = Uri.parse('${Appurl.koorTeknisDocument}/$id');
+    final url = Uri.parse('${Appurl.samplingDocument}/$id');
     try {
       var request = http.MultipartRequest('POST', url);
       request.headers['Authorization'] = 'Bearer ${user!.token}';
+      print(request.headers['Authorization'] = 'Bearer ${user.token}');
+      print(user.id);
 
-      request.fields['tgl_masuk'] = uploadDocumentKoorteknis.tglMasuk;
-      request.fields['status'] = uploadDocumentKoorteknis.status;
+      request.fields['tgl_survey'] = uploadDocumentPenyediaSampling.tglSurvey;
+      request.fields['status'] = uploadDocumentPenyediaSampling.status;
 
       request.files.add(
         await http.MultipartFile.fromPath(
           'document_path',
-          uploadDocumentKoorteknis.documentPath,
+          uploadDocumentPenyediaSampling.documentPath,
           contentType: MediaType('image', 'jpeg'),
         ),
       );
 
       final response = await request.send();
+      final responseData = await response.stream.bytesToString();
+      print(responseData.toString());
+
       if (response.statusCode != 200) {
         throw Exception('Gagal upload dokumen');
       }
