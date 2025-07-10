@@ -8,4 +8,5 @@ class Appurl {
   static const String marketingDocument = '$baseurl/marketing/document';
   static const String koorTeknisDocument = '$baseurl/koorteknis/document';
   static const String samplingDocument = '$baseurl/sampling/document';
+  static const String quotationDocument = '$baseurl/pottdquotation/document';
 }
