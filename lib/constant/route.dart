@@ -2,9 +2,12 @@ import '../features/auth/views/login_page.dart';
 import '../features/auth/views/register_page.dart';
 import '../features/customers/views/dashboard_customer_page.dart';
 import '../features/customers/views/detail_document_user.dart';
+import '../features/customers/views/detail_quotation_user.dart';
 import '../features/customers/views/form_request_message.dart';
 import '../features/customers/views/list_album_document_page.dart';
 import '../features/customers/views/list_document_user.dart';
+import '../features/customers/views/list_quotation_user.dart';
+import '../features/customers/views/upload_document_invoice.dart';
 import '../features/koor_teknis/views/dashboard_koor_teknis.dart';
 import '../features/koor_teknis/views/detail_document_koor.dart';
 import '../features/koor_teknis/views/list_dokumen_user_teknis.dart';
@@ -31,6 +34,9 @@ dynamic routes = {
   ListAlbumDocumentPage.routeName: (context) => ListAlbumDocumentPage(),
   ListDocumentUser.routeName: (context) => ListDocumentUser(),
   DetailDocumentUser.routeName: (context) => DetailDocumentUser(),
+  ListQuotationUser.routeName: (context) => ListQuotationUser(),
+  DetailQuotationUser.routeName: (context) => DetailQuotationUser(),
+  UploadDocumentInvoice.routeName: (context) => UploadDocumentInvoice(),
   DashboardMarketing.routeName: (context) => DashboardMarketing(),
   ListDokumenUserMarketing.routeName: (context) => ListDokumenUserMarketing(),
   DetailDocumentMarketing.routeName: (context) => DetailDocumentMarketing(),
