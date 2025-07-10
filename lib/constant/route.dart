@@ -1,3 +1,5 @@
+import 'package:mutiara_lab/features/koor_teknis/views/detail_document_koor.dart';
+import 'package:mutiara_lab/features/koor_teknis/views/upload_document_koor.dart';
 import 'package:mutiara_lab/features/marketing/views/upload_document_marketing.dart';
 
 import '../features/auth/views/login_page.dart';
@@ -32,6 +34,8 @@ dynamic routes = {
   UploadDocumentMarketing.routeName: (context) => UploadDocumentMarketing(),
   ListDocumentQuotation.routeName: (context) => ListDocumentQuotation(),
   DashboardKoorTeknis.routeName: (context) => DashboardKoorTeknis(),
+  DetailDocumentKoor.routeName: (context) => DetailDocumentKoor(),
+  UploadDocumentKoor.routeName: (context) => UploadDocumentKoor(),
   ListDokumenUserTeknis.routeName: (context) => ListDokumenUserTeknis(),
   DashboardPenyediaSampling.routeName: (context) => DashboardPenyediaSampling(),
   ListSurveyLapangan.routeName: (context) => ListSurveyLapangan(),
