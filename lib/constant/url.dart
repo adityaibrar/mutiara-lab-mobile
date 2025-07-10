@@ -5,4 +5,9 @@ class Appurl {
   static const String login = '$baseurl/login';
   static const String uploadRequest = '$baseurl/user/document';
   static const String fetchAlbumDocument = '$baseurl/user';
+  static const String marketingDocument = '$baseurl/marketing/document';
+  static const String koorTeknisDocument = '$baseurl/koorteknis/document';
+  static const String samplingDocument = '$baseurl/sampling/document';
+  static const String quotationDocument = '$baseurl/pottdquotation/document';
+  static const String invoiceDocument = '$baseurl/invoice/document';
 }

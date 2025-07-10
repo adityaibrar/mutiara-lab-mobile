@@ -28,17 +28,7 @@ class DocumentUser {
       docDesc: data['doc_desc'],
       imagePath: data['image_path'],
       docYear: data['doc_year'],
-      status: data['status']
+      status: data['status'],
     );
   }
 }
-
-// "id": 1,
-//             "user_id": 6,
-//             "doc_name": "testing upload",
-//             "doc_date": "9-7-2025",
-//             "doc_number": "324/22/INV/25",
-//             "doc_desc": "tester upload",
-//             "image_path": "/storage/uploads/IMG_1752071258_686e7c5a81e25.jpg",
-//             "doc_year": "2025",
-//             "status": "pending",

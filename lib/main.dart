@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mutiara_lab/features/customers/providers/customer_provider.dart';
-import 'package:mutiara_lab/features/customers/providers/image_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'constant/route.dart';
 import 'constant/theme.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/customers/providers/customer_provider.dart';
+import 'features/customers/providers/image_provider.dart';
+import 'features/koor_teknis/provider/koor_teknis_provider.dart';
+import 'features/marketing/providers/marketing_provider.dart';
+import 'features/penyedia_sampling/providers/penyedia_sampling_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized;
@@ -24,6 +27,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthNotifier()),
         ChangeNotifierProvider(create: (_) => ImageNotifier()),
         ChangeNotifierProvider(create: (_) => CustomerNotifier()),
+        ChangeNotifierProvider(create: (_) => MarketingNotifier()),
+        ChangeNotifierProvider(create: (_) => KoorTeknisProvider()),
+        ChangeNotifierProvider(create: (_) => PenyediaSamplingNotifier()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

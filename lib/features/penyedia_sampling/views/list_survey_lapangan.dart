@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mutiara_lab/features/penyedia_sampling/providers/penyedia_sampling_provider.dart';
+import 'package:mutiara_lab/features/penyedia_sampling/views/detail_document_penyedia_sampling.dart';
+import 'package:mutiara_lab/widgets/item_document_sampling.dart';
+import 'package:provider/provider.dart';
 
-class ListSurveyLapangan extends StatelessWidget {
+import '../../../constant/helpers/dialog_helper.dart';
+import '../../../constant/utils/state_enum.dart';
+import '../../../widgets/custom_snackbar.dart';
+
+class ListSurveyLapangan extends StatefulWidget {
   static const String routeName = '/list-survey-lapangan';
   const ListSurveyLapangan({super.key});
+
+  @override
+  State<ListSurveyLapangan> createState() => _ListSurveyLapanganState();
+}
+
+class _ListSurveyLapanganState extends State<ListSurveyLapangan> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PenyediaSamplingNotifier>().getDocumentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +38,56 @@ class ListSurveyLapangan extends StatelessWidget {
                 begin: Alignment.topLeft,
                 colors: [Color(0xFF0F172A), Color(0xFF1E3A8A)],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Consumer<PenyediaSamplingNotifier>(
+              builder: (context, marketingNotifier, child) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (marketingNotifier.state == RequestState.loading) {
+                    DialogHelper.showLoadingDialog(context);
+                  }
+                  if (marketingNotifier.state == RequestState.loaded) {
+                    DialogHelper.hideLoadingDialog(context);
+                    if (marketingNotifier.listDocument.isEmpty) {
+                      CustomSnackbar(
+                        title: 'Info',
+                        message: 'Belum ada dokumen yang tersedia',
+                        type: SnackbarType.success,
+                      ).show(context);
+                      marketingNotifier.resetState();
+                    }
+                  }
+
+                  if (marketingNotifier.state == RequestState.error) {
+                    DialogHelper.hideLoadingDialog(context);
+                    CustomSnackbar(
+                      title: 'Error',
+                      message: 'Error ${marketingNotifier.errorMessage}',
+                      type: SnackbarType.success,
+                    ).show(context);
+                    marketingNotifier.resetState();
+                  }
+                });
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    final item = marketingNotifier.listDocument[index];
+                    return ItemDocumentSampling(
+                      koorTeknisDocument: item,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          DetailDocumentPenyediaSampling.routeName,
+                          arguments: item,
+                        );
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
+                  itemCount: marketingNotifier.listDocument.length,
+                );
+              },
             ),
           ),
         ],

@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
           DashboardCustomerPage.routeName,
         );
       } else if (authNotifier.user!.role == 'marketing') {
-        // Navigator.pushReplacementNamed(context, DashboardMarketing.routeName);
+        Navigator.pushReplacementNamed(context, DashboardMarketing.routeName);
       } else if (authNotifier.user!.role == 'koor teknis') {
         Navigator.pushReplacementNamed(context, DashboardKoorTeknis.routeName);
       } else if (authNotifier.user!.role == 'penyedia sampling') {

@@ -8,6 +8,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../../auth/views/login_page.dart';
 import 'form_request_message.dart';
 import 'list_album_document_page.dart';
+import 'list_quotation_user.dart';
 
 class DashboardCustomerPage extends StatelessWidget {
   static const String routeName = '/dashboard-customer-page';
@@ -70,7 +71,7 @@ class DashboardCustomerPage extends StatelessWidget {
               ButtonGlass(
                 title: 'PO/TTd Quotation Lab MLM',
                 onTap: () {
-                  print('quotation');
+                  Navigator.pushNamed(context, ListQuotationUser.routeName);
                 },
               ),
               SizedBox(height: 10.h),

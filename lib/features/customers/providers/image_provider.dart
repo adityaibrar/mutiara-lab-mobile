@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../widgets/custom_snackbar.dart';
 
 class ImageNotifier extends ChangeNotifier {
   final ImagePicker imagePicker = ImagePicker();
-
   XFile? _selectedImage;
   XFile? get selectedImage => _selectedImage;
 
@@ -37,22 +39,41 @@ class ImageNotifier extends ChangeNotifier {
           source: ImageSource.gallery,
           imageQuality: 50,
         );
-        _selectedImage = image;
-        notifyListeners();
       } else if (option == 'camera') {
         image = await imagePicker.pickImage(
           source: ImageSource.camera,
           imageQuality: 50,
         );
-        _selectedImage = image;
-        notifyListeners();
       }
 
       if (image != null) {
-        _selectedImage = image;
-        notifyListeners();
+        // Jalankan OCR
+        final text = await _runOCR(image);
+        if (text.toLowerCase().contains('mutiara')) {
+          _selectedImage = image;
+          notifyListeners();
+        } else {
+          CustomSnackbar(
+            title: 'Gagal',
+            message: 'Gambar invalid...',
+            type: SnackbarType.error,
+          ).show(context);
+          _selectedImage = null;
+          notifyListeners();
+        }
       }
     }
+  }
+
+  Future<String> _runOCR(XFile image) async {
+    final inputImage = InputImage.fromFilePath(image.path);
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+    final RecognizedText recognizedText = await textRecognizer.processImage(
+      inputImage,
+    );
+    await textRecognizer.close();
+
+    return recognizedText.text; // hasil semua teks
   }
 
   Future<void> deleteImage() async {
