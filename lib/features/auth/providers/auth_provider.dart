@@ -83,11 +83,8 @@ class AuthNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getCurrentUser() async {
-    final user = await _localStorage.getDataUser();
-    if (user != null) {
-      _user = user;
-    }
+  void resetState() {
+    _state = RequestState.empty;
     notifyListeners();
   }
 }

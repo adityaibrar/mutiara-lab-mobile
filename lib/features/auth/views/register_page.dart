@@ -7,6 +7,7 @@ import '../../../constant/helpers/dialog_helper.dart';
 import '../../../constant/theme.dart';
 import '../../../constant/utils/state_enum.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/input_field.dart';
 import '../providers/auth_provider.dart';
 import 'login_page.dart';
@@ -55,6 +56,13 @@ class _RegisterPageState extends State<RegisterPage> {
               if (authNotifier.state == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
+                  CustomSnackbar(
+                    title: 'Berhasil',
+                    message: 'Berhasil register',
+                    type: SnackbarType.success,
+                  ).show(context);
+                  authNotifier.resetState();
+                  Navigator.pushReplacementNamed(context, LoginPage.routeName);
                 });
               }
               return CustomButton(
