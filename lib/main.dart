@@ -6,7 +6,7 @@ import 'constant/route.dart';
 import 'constant/theme.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/customers/providers/customer_provider.dart';
-import 'features/customers/providers/image_provider.dart';
+import 'features/customers/providers/file_provider.dart';
 import 'features/koor_teknis/provider/koor_teknis_provider.dart';
 import 'features/marketing/providers/marketing_provider.dart';
 import 'features/penyedia_sampling/providers/penyedia_sampling_provider.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthNotifier()),
-        ChangeNotifierProvider(create: (_) => ImageNotifier()),
+        ChangeNotifierProvider(create: (_) => FileNotifier()),
         ChangeNotifierProvider(create: (_) => CustomerNotifier()),
         ChangeNotifierProvider(create: (_) => MarketingNotifier()),
         ChangeNotifierProvider(create: (_) => KoorTeknisProvider()),

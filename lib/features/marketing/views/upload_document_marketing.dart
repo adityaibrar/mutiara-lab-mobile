@@ -11,7 +11,7 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_calendar.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/input_field.dart';
-import '../../customers/providers/image_provider.dart';
+import '../../customers/providers/file_provider.dart';
 import '../models/upload_document_marketing.dart';
 import '../providers/marketing_provider.dart';
 
@@ -64,16 +64,16 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
   }
 
   Future postDocument(
-    ImageNotifier imageNotifier,
+    FileNotifier fileNotifier,
     MarketingNotifier marketingNotifier,
   ) async {
-    if (imageNotifier.selectedImage == null) {
+    if (fileNotifier.selectedImage == null) {
       throw ('gambar kosong');
     }
     final data = UploadDocumentMarketingModel(
       tglKajian: _dateController.text,
       ketKajian: _subjectController.text,
-      docPath: imageNotifier.selectedImage!.path,
+      docPath: fileNotifier.selectedImage!.path,
       status: 'accept marketing',
     );
     await marketingNotifier.uploadDocument(id!, data);
@@ -90,8 +90,8 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(gradient: backgroundGradient),
           ),
-          Consumer2<ImageNotifier, MarketingNotifier>(
-            builder: (context, imageNotifier, marketingNotifier, child) {
+          Consumer2<FileNotifier, MarketingNotifier>(
+            builder: (context, fileNotifier, marketingNotifier, child) {
               if (marketingNotifier.state == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
@@ -107,7 +107,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                     type: SnackbarType.success,
                   ).show(context);
                   marketingNotifier.resetState();
-                  imageNotifier.deleteImage();
+                  fileNotifier.deleteFile();
                 });
               }
               return Padding(
@@ -134,7 +134,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                         ),
                       ),
                       SizedBox(height: 10.h),
-                      _buildImageDisplay(imageNotifier),
+                      _buildImageDisplay(fileNotifier),
                       SizedBox(height: 10.h),
                       InputField(
                         controller: _dateController,
@@ -153,7 +153,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                       SizedBox(height: 10.h),
                       CustomButton(
                         onPressed: () async {
-                          await postDocument(imageNotifier, marketingNotifier);
+                          await postDocument(fileNotifier, marketingNotifier);
                         },
                         label: 'Simpan',
                       ),
@@ -168,52 +168,82 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
     );
   }
 
-  Widget _buildImageDisplay(ImageNotifier imageNotifier) {
-    return imageNotifier.selectedImage != null
-        ? Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20.r),
-                child: Image.file(
-                  File(imageNotifier.selectedImage!.path),
-                  height: 200.h,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+  Widget _buildImageDisplay(FileNotifier fileNotifier) {
+    if (fileNotifier.selectedImage != null) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.r),
+            child: Image.file(
+              File(fileNotifier.selectedImage!.path),
+              height: 200.h,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            top: -10,
+            right: -8,
+            child: GestureDetector(
+              onTap: fileNotifier.deleteFile,
+              child: _buildDeleteButton(),
+            ),
+          ),
+        ],
+      );
+    } else if (fileNotifier.selectedPdf != null) {
+      return Container(
+        height: 60.h,
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14.r),
+          color: Colors.white.withOpacity(0.2),
+          border: Border.all(color: whiteColor, width: 2),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.picture_as_pdf, color: whiteColor, size: 40),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Text(
+                fileNotifier.selectedPdf!.path.split('/').last,
+                style: whiteTextStyle,
+                overflow: TextOverflow.ellipsis,
               ),
-              Positioned(
-                top: -10,
-                right: -8,
-                child: GestureDetector(
-                  onTap: imageNotifier.deleteImage,
-                  child: _buildDeleteButton(),
-                ),
-              ),
-            ],
-          )
-        : Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14.r),
-                child: Image.asset(
-                  'assets/uploadimg.png',
-                  height: 200.h,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                top: -10,
-                right: -8,
-                child: GestureDetector(
-                  onTap: () => imageNotifier.selectImage(context),
-                  child: _buildAddButton(),
-                ),
-              ),
-            ],
-          );
+            ),
+            GestureDetector(
+              onTap: fileNotifier.deleteFile,
+              child: _buildDeleteButton(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.r),
+            child: Image.asset(
+              'assets/uploadimg.png',
+              height: 200.h,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            top: -10,
+            right: -8,
+            child: GestureDetector(
+              onTap: () => fileNotifier.selectFile(context),
+              child: _buildAddButton(),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildAddButton() {

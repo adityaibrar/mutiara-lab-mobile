@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
 
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
@@ -49,11 +50,22 @@ class MarketingService {
       request.fields['ket_kajian'] = uploadDocumentMarketing.ketKajian;
       request.fields['status'] = uploadDocumentMarketing.status;
 
+      final fileExtension = path
+          .extension(uploadDocumentMarketing.docPath)
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == '.pdf') {
+        mediaType = MediaType('application', 'pdf');
+      } else {
+        mediaType = MediaType('image', 'jpeg'); // default gambar
+      }
+
       request.files.add(
         await http.MultipartFile.fromPath(
           'document_path',
           uploadDocumentMarketing.docPath,
-          contentType: MediaType('image', 'jpeg'),
+          contentType: mediaType,
         ),
       );
 
@@ -74,7 +86,6 @@ class MarketingService {
     try {
       final response = await http.get(url, headers: header);
       final responseData = jsonDecode(response.body);
-      // print(responseData);
       if (response.statusCode != 200) {
         throw Exception('Failed fetch album document user');
       }

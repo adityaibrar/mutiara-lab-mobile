@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
 
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
@@ -27,11 +28,22 @@ class CustomerService {
       request.fields['doc_desc'] = uploadDocumentCustomer.docDesc;
       request.fields['doc_year'] = uploadDocumentCustomer.docYear;
 
+      final fileExtension = path
+          .extension(uploadDocumentCustomer.imagePath)
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == '.pdf') {
+        mediaType = MediaType('application', 'pdf');
+      } else {
+        mediaType = MediaType('image', 'jpeg'); // default gambar
+      }
+
       request.files.add(
         await http.MultipartFile.fromPath(
           'image_path',
           uploadDocumentCustomer.imagePath,
-          contentType: MediaType('image', 'jpeg'),
+          contentType: mediaType,
         ),
       );
 
