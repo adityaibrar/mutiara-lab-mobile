@@ -78,8 +78,8 @@ class DashboardCustomerPage extends StatelessWidget {
               ButtonGlass(
                 title: 'Logout',
                 onTap: () async {
-                  await context.read<AuthNotifier>().logout();
                   Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                  await context.read<AuthNotifier>().logout();
                 },
               ),
             ],

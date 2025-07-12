@@ -210,7 +210,7 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14.r),
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           border: Border.all(color: whiteColor, width: 2),
         ),
         child: Row(

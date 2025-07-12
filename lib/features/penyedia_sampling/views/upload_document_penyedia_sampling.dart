@@ -38,7 +38,6 @@ class _UploadDocumentPenyediaSamplingState
     super.didChangeDependencies();
     if (!_isInitialized) {
       id = ModalRoute.of(context)!.settings.arguments as int?;
-      print(id);
       _isInitialized = true;
     }
   }
@@ -194,7 +193,7 @@ class _UploadDocumentPenyediaSamplingState
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14.r),
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           border: Border.all(color: whiteColor, width: 2),
         ),
         child: Row(

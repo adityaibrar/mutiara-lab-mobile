@@ -11,9 +11,8 @@ class AuthServices {
     try {
       final requestBody = {'username': username, 'password': password};
       final response = await http.post(url, body: requestBody);
-      final responseData = json.decode(response.body);
-      if (response.statusCode == 200) {
-        print(responseData);
+      if (response.statusCode != 200) {
+        throw Exception('Username atau pasword salah');
       }
     } catch (e) {
       throw Exception(e.toString());

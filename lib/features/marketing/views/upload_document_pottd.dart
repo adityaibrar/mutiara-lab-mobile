@@ -33,7 +33,6 @@ class _UploadDocumentPottdState extends State<UploadDocumentPottd> {
     super.didChangeDependencies();
     if (!_isInitialized) {
       id = ModalRoute.of(context)!.settings.arguments as int?;
-      print(id);
       _isInitialized = true;
     }
   }
