@@ -33,12 +33,21 @@ class ItemDocumentSampling extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.r),
-                  child: Image.network(
-                    '${Appurl.base}${koorTeknisDocument.documentPath}',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
-                  ),
+                  child:
+                      koorTeknisDocument.documentMarketing!.documentPath!
+                          .toLowerCase()
+                          .endsWith('.pdf')
+                      ? Icon(
+                          Icons.picture_as_pdf,
+                          size: 50.h,
+                          color: whiteColor,
+                        )
+                      : Image.network(
+                          '${Appurl.base}${koorTeknisDocument.documentMarketing!.documentPath}',
+                          height: 50.h,
+                          width: 50.w,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 SizedBox(width: 10.w),
                 Column(

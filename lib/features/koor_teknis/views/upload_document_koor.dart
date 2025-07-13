@@ -64,15 +64,26 @@ class _UploadDocumentKoorState extends State<UploadDocumentKoor> {
     FileNotifier fileNotifier,
     KoorTeknisProvider koorTeknisProvider,
   ) async {
-    if (fileNotifier.selectedImage == null) {
-      throw ('gambar kosong');
+    if (fileNotifier.selectedImage == null &&
+        fileNotifier.selectedPdf == null) {
+      throw ('Tidak ada file yang dipilih');
     }
-    final data = UploadDocumentKoorteknis(
-      tglMasuk: _dateController.text,
-      documentPath: fileNotifier.selectedImage!.path,
-      status: 'accept koor teknis',
-    );
-    await koorTeknisProvider.uploadDocument(id!, data);
+    if (fileNotifier.selectedImage != null) {
+      final data = UploadDocumentKoorteknis(
+        tglMasuk: _dateController.text,
+        documentPath: fileNotifier.selectedImage!.path,
+        status: 'accept koor teknis',
+      );
+      await koorTeknisProvider.uploadDocument(id!, data);
+    }
+    if (fileNotifier.selectedPdf != null) {
+      final data = UploadDocumentKoorteknis(
+        tglMasuk: _dateController.text,
+        documentPath: fileNotifier.selectedPdf!.path,
+        status: 'accept koor teknis',
+      );
+      await koorTeknisProvider.uploadDocument(id!, data);
+    }
   }
 
   @override
@@ -88,12 +99,12 @@ class _UploadDocumentKoorState extends State<UploadDocumentKoor> {
           ),
           Consumer2<FileNotifier, KoorTeknisProvider>(
             builder: (context, fileNotifier, koorTeknisProvider, child) {
-              if (koorTeknisProvider.state == RequestState.loading) {
+              if (koorTeknisProvider.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (koorTeknisProvider.state == RequestState.loaded) {
+              if (koorTeknisProvider.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
@@ -102,7 +113,7 @@ class _UploadDocumentKoorState extends State<UploadDocumentKoor> {
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  koorTeknisProvider.resetState();
+                  koorTeknisProvider.resetUploadState();
                   fileNotifier.deleteFile();
                 });
               }

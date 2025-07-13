@@ -11,25 +11,27 @@ class CustomerNotifier with ChangeNotifier {
   final CustomerService _customerService = CustomerService();
 
   RequestState _state = RequestState.empty;
+  RequestState _uploadState = RequestState.empty;
   String? _errorMessage = '';
   List<AlbumDocument> _listAlbum = [];
   List<DocumentUser> _listDocument = [];
   List<ListInvoiceModel> _listQuotationDocument = [];
 
   RequestState get state => _state;
+  RequestState get uploadState => _uploadState;
   String? get errorMessage => _errorMessage;
   List<AlbumDocument> get listAlbum => _listAlbum;
   List<DocumentUser> get listDocument => _listDocument;
   List<ListInvoiceModel> get listQuotationDocument => _listQuotationDocument;
 
   Future<void> uploadDocument(UploadDocumentUser uploadDocumentCustomer) async {
-    _state = RequestState.loading;
+    _uploadState = RequestState.loading;
     notifyListeners();
     try {
       await _customerService.uploadDocumentCustomer(uploadDocumentCustomer);
-      _state = RequestState.loaded;
+      _uploadState = RequestState.loaded;
     } catch (e) {
-      _state = RequestState.error;
+      _uploadState = RequestState.error;
       _errorMessage = e.toString();
     }
     notifyListeners();
@@ -83,12 +85,12 @@ class CustomerNotifier with ChangeNotifier {
     required String subject,
   }) async {
     await _customerService.uploadInvoice(id: id, date: date, subject: subject);
-    _state = RequestState.loading;
+    _uploadState = RequestState.loading;
     notifyListeners();
     try {
-      _state = RequestState.loaded;
+      _uploadState = RequestState.loaded;
     } catch (e) {
-      _state = RequestState.error;
+      _uploadState = RequestState.error;
       _errorMessage = e.toString();
     }
     notifyListeners();
@@ -96,6 +98,11 @@ class CustomerNotifier with ChangeNotifier {
 
   void resetState() {
     _state = RequestState.empty;
+    notifyListeners();
+  }
+
+  void resetUploadState() {
+    _uploadState = RequestState.empty;
     notifyListeners();
   }
 }

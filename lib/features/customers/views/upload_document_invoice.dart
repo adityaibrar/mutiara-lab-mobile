@@ -70,12 +70,12 @@ class _UploadDocumentInvoiceState extends State<UploadDocumentInvoice> {
           ),
           Consumer<CustomerNotifier>(
             builder: (context, customerNotifier, child) {
-              if (customerNotifier.state == RequestState.loading) {
+              if (customerNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (customerNotifier.state == RequestState.loaded) {
+              if (customerNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
@@ -84,7 +84,7 @@ class _UploadDocumentInvoiceState extends State<UploadDocumentInvoice> {
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  customerNotifier.resetState();
+                  customerNotifier.resetUploadState();
                 });
               }
               return Padding(

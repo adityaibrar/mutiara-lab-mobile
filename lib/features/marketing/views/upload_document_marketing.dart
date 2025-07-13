@@ -66,16 +66,28 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
     FileNotifier fileNotifier,
     MarketingNotifier marketingNotifier,
   ) async {
-    if (fileNotifier.selectedImage == null) {
-      throw ('gambar kosong');
+    if (fileNotifier.selectedImage == null &&
+        fileNotifier.selectedPdf == null) {
+      throw ('Tidak ada file yang di pilih');
     }
-    final data = UploadDocumentMarketingModel(
-      tglKajian: _dateController.text,
-      ketKajian: _subjectController.text,
-      docPath: fileNotifier.selectedImage!.path,
-      status: 'accept marketing',
-    );
-    await marketingNotifier.uploadDocument(id!, data);
+    if (fileNotifier.selectedImage != null) {
+      final data = UploadDocumentMarketingModel(
+        tglKajian: _dateController.text,
+        ketKajian: _subjectController.text,
+        docPath: fileNotifier.selectedImage!.path,
+        status: 'accept marketing',
+      );
+      await marketingNotifier.uploadDocument(id!, data);
+    }
+    if (fileNotifier.selectedPdf != null) {
+      final data = UploadDocumentMarketingModel(
+        tglKajian: _dateController.text,
+        ketKajian: _subjectController.text,
+        docPath: fileNotifier.selectedPdf!.path,
+        status: 'accept marketing',
+      );
+      await marketingNotifier.uploadDocument(id!, data);
+    }
   }
 
   @override
@@ -96,7 +108,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (marketingNotifier.state == RequestState.loaded) {
+              if (marketingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
@@ -105,7 +117,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  marketingNotifier.resetState();
+                  marketingNotifier.resetUploadState();
                   fileNotifier.deleteFile();
                 });
               }
@@ -153,6 +165,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
                       CustomButton(
                         onPressed: () async {
                           await postDocument(fileNotifier, marketingNotifier);
+                          marketingNotifier.resetState();
                         },
                         label: 'Simpan',
                       ),

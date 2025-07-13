@@ -70,12 +70,12 @@ class _UploadDocumentPottdState extends State<UploadDocumentPottd> {
           ),
           Consumer<MarketingNotifier>(
             builder: (context, marketingNotifier, child) {
-              if (marketingNotifier.state == RequestState.loading) {
+              if (marketingNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (marketingNotifier.state == RequestState.loaded) {
+              if (marketingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
@@ -84,7 +84,7 @@ class _UploadDocumentPottdState extends State<UploadDocumentPottd> {
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  marketingNotifier.resetState();
+                  marketingNotifier.resetUploadState();
                 });
               }
               return Padding(

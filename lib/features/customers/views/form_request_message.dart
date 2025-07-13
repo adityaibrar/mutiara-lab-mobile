@@ -55,18 +55,30 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
     FileNotifier fileNotifier,
     CustomerNotifier customerNotifier,
   ) async {
-    if (fileNotifier.selectedImage == null) {
-      throw ('gambar kosong');
+    if (fileNotifier.selectedImage == null &&
+        fileNotifier.selectedPdf == null) {
+      throw ('Tidak ada file yang dipilih');
+    } else if (fileNotifier.selectedImage != null) {
+      final data = UploadDocumentUser(
+        docName: _nameDocController.text,
+        docDate: _dateController.text,
+        docNumber: _nomorController.text,
+        docDesc: _subjectController.text,
+        imagePath: fileNotifier.selectedImage!.path,
+        docYear: _yearDocController.text,
+      );
+      await customerNotifier.uploadDocument(data);
+    } else if (fileNotifier.selectedPdf != null) {
+      final data = UploadDocumentUser(
+        docName: _nameDocController.text,
+        docDate: _dateController.text,
+        docNumber: _nomorController.text,
+        docDesc: _subjectController.text,
+        imagePath: fileNotifier.selectedPdf!.path,
+        docYear: _yearDocController.text,
+      );
+      await customerNotifier.uploadDocument(data);
     }
-    final data = UploadDocumentUser(
-      docName: _nameDocController.text,
-      docDate: _dateController.text,
-      docNumber: _nomorController.text,
-      docDesc: _subjectController.text,
-      imagePath: fileNotifier.selectedImage!.path,
-      docYear: _yearDocController.text,
-    );
-    await customerNotifier.uploadDocument(data);
   }
 
   @override
@@ -82,12 +94,12 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
           ),
           Consumer2<FileNotifier, CustomerNotifier>(
             builder: (context, fileNotifier, customerNotifier, child) {
-              if (customerNotifier.state == RequestState.loading) {
+              if (customerNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (customerNotifier.state == RequestState.loaded) {
+              if (customerNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
@@ -96,7 +108,7 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  customerNotifier.resetState();
+                  customerNotifier.resetUploadState();
                   fileNotifier.deleteFile();
                 });
               }

@@ -66,15 +66,26 @@ class _UploadDocumentPenyediaSamplingState
     FileNotifier fileNotifier,
     PenyediaSamplingNotifier penyediaSamplingNotifier,
   ) async {
-    if (fileNotifier.selectedImage == null) {
-      throw ('gambar kosong');
+    if (fileNotifier.selectedImage == null &&
+        fileNotifier.selectedPdf == null) {
+      throw ('Tidak ada file yang dipilih');
     }
-    final data = UploadDocumentPenyediaSamplingModel(
-      tglSurvey: _dateController.text,
-      documentPath: fileNotifier.selectedImage!.path,
-      status: 'accept sampling',
-    );
-    await penyediaSamplingNotifier.uploadDocument(id!, data);
+    if (fileNotifier.selectedImage != null) {
+      final data = UploadDocumentPenyediaSamplingModel(
+        tglSurvey: _dateController.text,
+        documentPath: fileNotifier.selectedImage!.path,
+        status: 'accept sampling',
+      );
+      await penyediaSamplingNotifier.uploadDocument(id!, data);
+    }
+    if (fileNotifier.selectedPdf != null) {
+      final data = UploadDocumentPenyediaSamplingModel(
+        tglSurvey: _dateController.text,
+        documentPath: fileNotifier.selectedPdf!.path,
+        status: 'accept sampling',
+      );
+      await penyediaSamplingNotifier.uploadDocument(id!, data);
+    }
   }
 
   @override
@@ -90,12 +101,12 @@ class _UploadDocumentPenyediaSamplingState
           ),
           Consumer2<FileNotifier, PenyediaSamplingNotifier>(
             builder: (context, fileNotifier, penyediaSamplingNotifier, child) {
-              if (penyediaSamplingNotifier.state == RequestState.loading) {
+              if (penyediaSamplingNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (penyediaSamplingNotifier.state == RequestState.loaded) {
+              if (penyediaSamplingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
                   Navigator.pop(context);
