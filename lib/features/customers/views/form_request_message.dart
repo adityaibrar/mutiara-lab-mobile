@@ -102,12 +102,12 @@ class _FormRequestMessageState extends State<FormRequestMessage> {
               if (customerNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pop(context);
                   CustomSnackbar(
                     title: 'Berhasil',
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
+                  Navigator.pop(context);
                   customerNotifier.resetUploadState();
                   fileNotifier.deleteFile();
                 });

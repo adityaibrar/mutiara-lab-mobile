@@ -103,7 +103,7 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
           ),
           Consumer2<FileNotifier, MarketingNotifier>(
             builder: (context, fileNotifier, marketingNotifier, child) {
-              if (marketingNotifier.state == RequestState.loading) {
+              if (marketingNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
@@ -111,7 +111,6 @@ class _UploadDocumentMarketingState extends State<UploadDocumentMarketing> {
               if (marketingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pop(context);
                   CustomSnackbar(
                     title: 'Berhasil',
                     message: 'Dokumen berhasil di upload',

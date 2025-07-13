@@ -101,7 +101,8 @@ class _UploadDocumentPenyediaSamplingState
           ),
           Consumer2<FileNotifier, PenyediaSamplingNotifier>(
             builder: (context, fileNotifier, penyediaSamplingNotifier, child) {
-              if (penyediaSamplingNotifier.uploadState == RequestState.loading) {
+              if (penyediaSamplingNotifier.uploadState ==
+                  RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
@@ -109,13 +110,13 @@ class _UploadDocumentPenyediaSamplingState
               if (penyediaSamplingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pop(context);
                   CustomSnackbar(
                     title: 'Berhasil',
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  penyediaSamplingNotifier.resetState();
+                  Navigator.pop(context);
+                  penyediaSamplingNotifier.resetUploadState();
                   fileNotifier.deleteFile();
                 });
               }

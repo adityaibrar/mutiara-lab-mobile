@@ -107,12 +107,12 @@ class _UploadDocumentKoorState extends State<UploadDocumentKoor> {
               if (koorTeknisProvider.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pop(context);
                   CustomSnackbar(
                     title: 'Berhasil',
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
+                  Navigator.pop(context);
                   koorTeknisProvider.resetUploadState();
                   fileNotifier.deleteFile();
                 });

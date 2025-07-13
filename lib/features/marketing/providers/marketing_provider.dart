@@ -79,7 +79,7 @@ class MarketingNotifier with ChangeNotifier {
       );
       _uploadState = RequestState.loaded;
     } catch (e) {
-      _state = RequestState.error;
+      _uploadState = RequestState.error;
       _errorMessage = e.toString();
     }
     notifyListeners();
