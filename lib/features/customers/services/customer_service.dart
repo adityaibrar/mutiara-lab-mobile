@@ -111,15 +111,17 @@ class CustomerService {
 
   Future<List<ListInvoiceModel>> getListQuotationDocument() async {
     final user = await _localStorage.getDataUser();
-    final url = Uri.parse(Appurl.invoiceDocument);
+    final url = Uri.parse(Appurl.poTtdDocument);
     final header = {'Authorization': 'Bearer ${user!.token}'};
     try {
       final response = await http.get(url, headers: header);
       final responseData = jsonDecode(response.body);
+      // print(responseData);
       if (response.statusCode != 200) {
         throw Exception('Failed fetch album document user');
       }
-      final dataAlbum = responseData['data_invoice'];
+      final dataAlbum = responseData['data_po'];
+      print(dataAlbum);
       if (dataAlbum == null || dataAlbum is! List) {
         return [];
       }

@@ -111,9 +111,10 @@ class MarketingService {
     final user = await _localStorage.getDataUser();
     final url = Uri.parse('${Appurl.quotationDocument}/$id');
     final header = {'Authorization': 'Bearer ${user!.token}'};
-    final body = {'tgl_ttd': date, 'ket_ttd': subject};
+    final body = {'tgl_acc': date, 'ket_acc': subject};
     try {
       final response = await http.post(url, headers: header, body: body);
+      print(response.body);
       if (response.statusCode != 200) {
         throw Exception('Terjadi kesalah saat upload ttd quotation');
       }

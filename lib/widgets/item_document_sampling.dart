@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mutiara_lab/features/penyedia_sampling/models/koor_teknis_document.dart';
+import '../features/penyedia_sampling/models/koor_teknis_document.dart';
 
 import '../constant/theme.dart';
 import '../constant/url.dart';

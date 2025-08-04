@@ -90,7 +90,7 @@ class DetailDocumentQuotation extends StatelessWidget {
                             Navigator.pushNamed(
                               context,
                               UploadDocumentPottd.routeName,
-                              arguments: doc.documentUser!.id,
+                              arguments: doc.id,
                             );
                           },
                           style: ElevatedButton.styleFrom(

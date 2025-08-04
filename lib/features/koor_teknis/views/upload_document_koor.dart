@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mutiara_lab/features/koor_teknis/models/upload_document_koorteknis.dart';
-import 'package:mutiara_lab/features/koor_teknis/provider/koor_teknis_provider.dart';
+import '../models/upload_document_koorteknis.dart';
+import '../provider/koor_teknis_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/helpers/dialog_helper.dart';
