@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
 
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
@@ -43,23 +44,30 @@ class PenyediaSamplingServices {
     try {
       var request = http.MultipartRequest('POST', url);
       request.headers['Authorization'] = 'Bearer ${user!.token}';
-      print(request.headers['Authorization'] = 'Bearer ${user.token}');
-      print(user.id);
 
       request.fields['tgl_survey'] = uploadDocumentPenyediaSampling.tglSurvey;
       request.fields['status'] = uploadDocumentPenyediaSampling.status;
+
+      final fileExtension = path
+          .extension(uploadDocumentPenyediaSampling.documentPath)
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == '.pdf') {
+        mediaType = MediaType('application', 'pdf');
+      } else {
+        mediaType = MediaType('image', 'jpeg'); // default gambar
+      }
 
       request.files.add(
         await http.MultipartFile.fromPath(
           'document_path',
           uploadDocumentPenyediaSampling.documentPath,
-          contentType: MediaType('image', 'jpeg'),
+          contentType: mediaType,
         ),
       );
 
       final response = await request.send();
-      final responseData = await response.stream.bytesToString();
-      print(responseData.toString());
 
       if (response.statusCode != 200) {
         throw Exception('Gagal upload dokumen');

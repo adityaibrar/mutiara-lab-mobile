@@ -10,10 +10,12 @@ class PenyediaSamplingNotifier with ChangeNotifier {
       PenyediaSamplingServices();
 
   RequestState _state = RequestState.empty;
+  RequestState _uploadState = RequestState.empty;
   String? _errorMessage = '';
   List<KoorTeknisDocument> _listDocument = [];
 
   RequestState get state => _state;
+  RequestState get uploadState => _uploadState;
   String? get errorMessage => _errorMessage;
   List<KoorTeknisDocument> get listDocument => _listDocument;
 
@@ -35,16 +37,16 @@ class PenyediaSamplingNotifier with ChangeNotifier {
     int id,
     UploadDocumentPenyediaSamplingModel uploadDocumentPenyediaSampling,
   ) async {
-    _state = RequestState.loading;
+    _uploadState = RequestState.loading;
     notifyListeners();
     try {
       await _penyediaSamplingServices.uploadDocumentPenyediaSamplingService(
         id,
         uploadDocumentPenyediaSampling,
       );
-      _state = RequestState.loaded;
+      _uploadState = RequestState.loaded;
     } catch (e) {
-      _state = RequestState.error;
+      _uploadState = RequestState.error;
       _errorMessage = e.toString();
     }
     notifyListeners();
@@ -52,6 +54,11 @@ class PenyediaSamplingNotifier with ChangeNotifier {
 
   void resetState() {
     _state = RequestState.empty;
+    notifyListeners();
+  }
+
+  void resetUploadState() {
+    _uploadState = RequestState.empty;
     notifyListeners();
   }
 }

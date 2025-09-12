@@ -33,7 +33,6 @@ class _UploadDocumentPottdState extends State<UploadDocumentPottd> {
     super.didChangeDependencies();
     if (!_isInitialized) {
       id = ModalRoute.of(context)!.settings.arguments as int?;
-      print(id);
       _isInitialized = true;
     }
   }
@@ -71,21 +70,21 @@ class _UploadDocumentPottdState extends State<UploadDocumentPottd> {
           ),
           Consumer<MarketingNotifier>(
             builder: (context, marketingNotifier, child) {
-              if (marketingNotifier.state == RequestState.loading) {
+              if (marketingNotifier.uploadState == RequestState.loading) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.showLoadingDialog(context);
                 });
               }
-              if (marketingNotifier.state == RequestState.loaded) {
+              if (marketingNotifier.uploadState == RequestState.loaded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   DialogHelper.hideLoadingDialog(context);
-                  Navigator.pop(context);
                   CustomSnackbar(
                     title: 'Berhasil',
                     message: 'Dokumen berhasil di upload',
                     type: SnackbarType.success,
                   ).show(context);
-                  marketingNotifier.resetState();
+                  Navigator.pop(context);
+                  marketingNotifier.resetUploadState();
                 });
               }
               return Padding(

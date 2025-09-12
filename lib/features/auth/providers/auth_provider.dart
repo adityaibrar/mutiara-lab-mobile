@@ -28,9 +28,6 @@ class AuthNotifier with ChangeNotifier {
     try {
       await _authServices.authRegister(username, password);
       _state = RequestState.loaded;
-      if (kDebugMode) {
-        print('Berhasil register');
-      }
     } catch (e) {
       _state = RequestState.error;
       _errorMessage = e.toString();
@@ -53,15 +50,9 @@ class AuthNotifier with ChangeNotifier {
       await _localStorage.setDataUser(authModel: user!);
       _state = RequestState.loaded;
       _stateUser = UserStatus.isReady;
-      if (kDebugMode) {
-        print('Login berhasil');
-      }
     } catch (e) {
       _state = RequestState.error;
       _errorMessage = e.toString();
-      if (kDebugMode) {
-        print('Login gagal: $_errorMessage');
-      }
     }
     notifyListeners();
   }

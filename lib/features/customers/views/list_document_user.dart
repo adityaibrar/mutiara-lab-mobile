@@ -67,6 +67,7 @@ class _ListDocumentUserState extends State<ListDocumentUser> {
                 return ListView.separated(
                   itemBuilder: (context, index) {
                     final item = customerNotifier.listDocument[index];
+                    print(item.imagePath);
                     return ItemDocument(
                       documentUser: item,
                       onTap: () {

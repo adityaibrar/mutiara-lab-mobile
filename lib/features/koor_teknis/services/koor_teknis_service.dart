@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
 
 import '../../../constant/helpers/local_storage.dart';
 import '../../../constant/url.dart';
@@ -48,11 +49,22 @@ class KoorTeknisService {
       request.fields['tgl_masuk'] = uploadDocumentKoorteknis.tglMasuk;
       request.fields['status'] = uploadDocumentKoorteknis.status;
 
+      final fileExtension = path
+          .extension(uploadDocumentKoorteknis.documentPath)
+          .toLowerCase();
+      MediaType mediaType;
+
+      if (fileExtension == '.pdf') {
+        mediaType = MediaType('application', 'pdf');
+      } else {
+        mediaType = MediaType('image', 'jpeg'); // default gambar
+      }
+
       request.files.add(
         await http.MultipartFile.fromPath(
           'document_path',
           uploadDocumentKoorteknis.documentPath,
-          contentType: MediaType('image', 'jpeg'),
+          contentType: mediaType,
         ),
       );
 

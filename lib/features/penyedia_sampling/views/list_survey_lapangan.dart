@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mutiara_lab/features/penyedia_sampling/providers/penyedia_sampling_provider.dart';
-import 'package:mutiara_lab/features/penyedia_sampling/views/detail_document_penyedia_sampling.dart';
-import 'package:mutiara_lab/widgets/item_document_sampling.dart';
+import '../providers/penyedia_sampling_provider.dart';
+import 'detail_document_penyedia_sampling.dart';
+import '../../../widgets/item_document_sampling.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/helpers/dialog_helper.dart';

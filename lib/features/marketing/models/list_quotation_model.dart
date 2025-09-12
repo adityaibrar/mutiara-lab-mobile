@@ -1,4 +1,4 @@
-import 'package:mutiara_lab/features/customers/models/document_user.dart';
+import '../../customers/models/document_user.dart';
 
 class ListQuotationModel {
   final int id;

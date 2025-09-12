@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../constant/theme.dart';
 import '../../../constant/url.dart';
@@ -43,12 +44,25 @@ class DetailQuotationUser extends StatelessWidget {
                   Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5.r),
-                      child: Image.network(
-                        '${Appurl.base}${doc.documentUser!.imagePath}',
-                        height: 200.h,
-                        width: 300.w,
-                        fit: BoxFit.cover,
-                      ),
+                      child:
+                          doc.penyediaSampling!.documentPath
+                              .toLowerCase()
+                              .endsWith('.pdf')
+                          ? SizedBox(
+                              height: 400.h,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SfPdfViewer.network(
+                                  '${Appurl.base}${doc.penyediaSampling!.documentPath}',
+                                ),
+                              ),
+                            )
+                          : Image.network(
+                              '${Appurl.base}${doc.penyediaSampling!.documentPath}',
+                              height: 200.h,
+                              width: 300.w,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   Container(
@@ -56,26 +70,22 @@ class DetailQuotationUser extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        _itemEdit(title: 'Keterangan Acc', data: doc.ketTtd),
+                        _itemEdit(title: 'Tanggal Acc', data: doc.tglTtd),
                         _itemEdit(
-                          title: 'Nama Dokumen',
-                          data: doc.documentUser?.docName ?? '',
-                        ),
-                        _itemEdit(title: 'Keterangan TTD', data: doc.ketTtd),
-                        _itemEdit(title: 'Tanggal TTD', data: doc.tglTtd),
-                        _itemEdit(
-                          title: 'Nomor Dokumen',
-                          data: doc.documentUser?.docNumber ?? '',
+                          title: 'Status Dokumen Marketing',
+                          data: doc.marketingModel?.status ?? '',
                         ),
                         _itemEdit(
-                          title: 'Deskripsi',
-                          data: doc.documentUser?.docDesc ?? '',
+                          title: 'Status Dokumen Penyedia Sampling',
+                          data: doc.penyediaSampling?.status ?? '',
                         ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
                               UploadDocumentInvoice.routeName,
-                              arguments: doc.documentUser!.id,
+                              arguments: doc.id,
                             );
                           },
                           style: ElevatedButton.styleFrom(

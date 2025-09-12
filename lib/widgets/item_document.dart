@@ -8,7 +8,11 @@ import '../features/customers/models/document_user.dart';
 class ItemDocument extends StatelessWidget {
   final DocumentUser documentUser;
   final VoidCallback onTap;
-  const ItemDocument({super.key, required this.documentUser, required this.onTap});
+  const ItemDocument({
+    super.key,
+    required this.documentUser,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +33,18 @@ class ItemDocument extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.r),
-                  child: Image.network(
-                    '${Appurl.base}${documentUser.imagePath}',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
-                  ),
+                  child: documentUser.imagePath!.toLowerCase().endsWith('.pdf')
+                      ? Icon(
+                          Icons.picture_as_pdf,
+                          size: 50.h,
+                          color: whiteColor,
+                        )
+                      : Image.network(
+                          '${Appurl.base}${documentUser.imagePath}',
+                          height: 50.h,
+                          width: 50.w,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 SizedBox(width: 10.w),
                 Column(

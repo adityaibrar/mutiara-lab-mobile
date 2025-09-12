@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../constant/theme.dart';
 import '../../../constant/url.dart';
@@ -44,12 +45,22 @@ class DetailDocumentQuotation extends StatelessWidget {
                   Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5.r),
-                      child: Image.network(
-                        '${Appurl.base}${doc.documentPath}',
-                        height: 200.h,
-                        width: 300.w,
-                        fit: BoxFit.cover,
-                      ),
+                      child: doc.documentPath.toLowerCase().endsWith('.pdf')
+                          ? SizedBox(
+                              height: 400.h,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SfPdfViewer.network(
+                                  '${Appurl.base}${doc.documentPath}',
+                                ),
+                              ),
+                            )
+                          : Image.network(
+                              '${Appurl.base}${doc.documentPath}',
+                              height: 200.h,
+                              width: 300.w,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   Container(
@@ -79,7 +90,7 @@ class DetailDocumentQuotation extends StatelessWidget {
                             Navigator.pushNamed(
                               context,
                               UploadDocumentPottd.routeName,
-                              arguments: doc.documentUser!.id,
+                              arguments: doc.id,
                             );
                           },
                           style: ElevatedButton.styleFrom(

@@ -8,7 +8,11 @@ import '../features/customers/models/list_invoice_model.dart';
 class ItemDocumentQuotation extends StatelessWidget {
   final ListInvoiceModel listInvoiceModel;
   final VoidCallback onTap;
-  const ItemDocumentQuotation({super.key, required this.listInvoiceModel, required this.onTap});
+  const ItemDocumentQuotation({
+    super.key,
+    required this.listInvoiceModel,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +33,21 @@ class ItemDocumentQuotation extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.r),
-                  child: Image.network(
-                    '${Appurl.base}${listInvoiceModel.documentUser!.imagePath}',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
-                  ),
+                  child:
+                      listInvoiceModel.marketingModel!.documentPath
+                          .toLowerCase()
+                          .endsWith('.pdf')
+                      ? Icon(
+                          Icons.picture_as_pdf,
+                          size: 50.h,
+                          color: whiteColor,
+                        )
+                      : Image.network(
+                          '${Appurl.base}${listInvoiceModel.marketingModel!.documentPath}',
+                          height: 50.h,
+                          width: 50.w,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 SizedBox(width: 10.w),
                 Column(
@@ -42,14 +55,14 @@ class ItemDocumentQuotation extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      listInvoiceModel.documentUser?.docName ?? '',
+                      listInvoiceModel.marketingModel?.status ?? '',
                       style: whiteTextStyle.copyWith(
                         fontSize: 18.sp,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      listInvoiceModel.documentUser?.docDate ?? '',
+                      listInvoiceModel.penyediaSampling?.status ?? '',
                       style: whiteTextStyle.copyWith(
                         fontSize: 18.sp,
                         fontWeight: medium,
